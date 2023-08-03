@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<div class="row">
+    <div class="col-4">
+        <div class="card text-bg-primary mb-3" style="max-width: 18rem;">
+            <div class="card-header">En Fazla Araç Markası</div>
+            <div class="card-body">
+                <h5 class="card-title">@ViewBag.BrandMax - @ViewBag.BrandCount</h5>
+                <p class="card-text">Geçen süre :  @ViewBag.Stopwatch</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="card text-bg-primary mb-3" style="max-width: 18rem;">
+            <div class="card-header">En Fazla Araç Markası</div>
+            <div class="card-body">
+                <p>Her markadan ne kadar araç olduğu ve yüzdesel olarak toplamın ne kadarına tekabül ediyor</p>
+                <h5 class="card-title">@ViewBag.Brand - @ViewBag.BrandMaxCount</h5>
+                <p class="card-text">İstatistik :  @ViewBag.PERCENT</p>
+                <p class="card-text">Geçen süre :  @ViewBag.StopwatchMaxWithCount</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="card text-bg-primary mb-3" style="max-width: 18rem;">
+            <div class="card-header">Bir Şehirde Kaç Adet Araç Var</div>
+            <div class="card-body">
+                <p>Her markadan ne kadar araç olduğu ve yüzdesel olarak toplamın ne kadarına tekabül ediyor</p>
+                <h5 class="card-title">@ViewBag.Brand - @ViewBag.BrandMaxCount</h5>
+                <p class="card-text">İstatistik :  @ViewBag.PERCENT</p>
+                <p class="card-text">Geçen süre :  @ViewBag.StopwatchMaxWithCount</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

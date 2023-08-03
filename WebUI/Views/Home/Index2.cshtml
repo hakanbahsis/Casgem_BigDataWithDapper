@@ -1,0 +1,163 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="au theme template">
+    <meta name="author" content="Hau Nguyen">
+    <meta name="keywords" content="au theme template">
+
+    <!-- Title Page-->
+    <title>Big Data </title>
+
+    <!-- Fontfaces CSS-->
+    <link href="~/CoolAdmin-master/css/font-face.css" rel="stylesheet" media="all">
+    <link href="~/CoolAdmin-master/vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
+    <link href="~/CoolAdmin-master/vendor/font-awesome-5/css/fontawesome-all.min.css" rel="stylesheet" media="all">
+    <link href="~/CoolAdmin-master/vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
+
+    <!-- Bootstrap CSS-->
+    <link href="~/CoolAdmin-master/vendor/bootstrap-4.1/bootstrap.min.css" rel="stylesheet" media="all">
+
+    <!-- Vendor CSS-->
+    <link href="~/CoolAdmin-master/vendor/animsition/animsition.min.css" rel="stylesheet" media="all">
+    <link href="~/CoolAdmin-master/vendor/bootstrap-progressbar/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet" media="all">
+    <link href="~/CoolAdmin-master/vendor/wow/animate.css" rel="stylesheet" media="all">
+    <link href="~/CoolAdmin-master/vendor/css-hamburgers/hamburgers.min.css" rel="stylesheet" media="all">
+    <link href="~/CoolAdmin-master/vendor/slick/slick.css" rel="stylesheet" media="all">
+    <link href="~/CoolAdmin-master/vendor/select2/select2.min.css" rel="stylesheet" media="all">
+    <link href="~/CoolAdmin-master/vendor/perfect-scrollbar/perfect-scrollbar.css" rel="stylesheet" media="all">
+
+    <!-- Main CSS-->
+    <link href="~/CoolAdmin-master/css/theme.css" rel="stylesheet" media="all">
+
+</head>
+
+<body class="animsition">
+    <!-- DATA TABLE-->
+    <section class="p-t-20">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="title-5 m-b-35">Araç Sorgula</h3>
+                    <form asp-controller="Home" asp-action="Index" method="get">
+                        <input type="text" name="searchString" placeholder="Arama yapın...">
+                        <button type="submit">Ara</button>
+                    </form>
+
+                    <div id="loadingMessage" style="display:none">Veriler yükleniyor...</div>
+                    <div class="table-responsive table-responsive-data2">
+                        <table class="table table-data2" id="carTable">
+                            <thead>
+                                <tr>
+                                    <th>PLAKA</th>
+                                    <th>MARKA</th>
+                                    <th>YAKIT</th>
+                                    <th>VİTES</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @if (Model != null)
+                                {
+                                    foreach (var car in Model)
+                                    {
+                                        <tr class="tr-shadow">
+                                            <td>@car.PLATE</td>
+                                            <td>@car.BRAND</td>
+                                            <td>@car.FUEL</td>
+                                            <td>@car.SHIFTTYPE</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        <p id="queryTime" style="display:none"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- END DATA TABLE-->
+    </div>
+
+    </div>
+
+    <!-- Jquery JS-->
+    <script src="~/CoolAdmin-master/vendor/jquery-3.2.1.min.js"></script>
+    <!-- Bootstrap JS-->
+    <script src="~/CoolAdmin-master/vendor/bootstrap-4.1/popper.min.js"></script>
+    <script src="~/CoolAdmin-master/vendor/bootstrap-4.1/bootstrap.min.js"></script>
+    <!-- Vendor JS       -->
+    <script src="~/CoolAdmin-master/vendor/slick/slick.min.js">
+    </script>
+    <script src="~/CoolAdmin-master/vendor/wow/wow.min.js"></script>
+    <script src="~/CoolAdmin-master/vendor/animsition/animsition.min.js"></script>
+    <script src="~/CoolAdmin-master/vendor/bootstrap-progressbar/bootstrap-progressbar.min.js">
+    </script>
+    <script src="~/CoolAdmin-master/vendor/counter-up/jquery.waypoints.min.js"></script>
+    <script src="~/CoolAdmin-master/vendor/counter-up/jquery.counterup.min.js">
+    </script>
+    <script src="~/CoolAdmin-master/vendor/circle-progress/circle-progress.min.js"></script>
+    <script src="~/CoolAdmin-master/vendor/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="~/CoolAdmin-master/vendor/chartjs/Chart.bundle.min.js"></script>
+    <script src="~/CoolAdmin-master/vendor/select2/select2.min.js">
+    </script>
+
+    <!-- Main JS-->
+    <script src="~/CoolAdmin-master/js/main.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $('form').submit(function () {
+                var searchString = $('input[name="searchString"]').val();
+                $('#loadingMessage').show();
+                $('#carTable').hide();
+                $('#queryTime').hide();
+                $.ajax({
+                    url: '/Home/Search',
+                    type: 'get',
+                    dataType: "json",
+                    data: { searchString: searchString },
+                    timeout: 15000,
+                    success: function (data) {
+                        $('#loadingMessage').hide();
+                        $('#carTable tbody').empty();
+                        if (data.data.length > 0) {
+                            $.each(JSON.parse(data.data), function (index, item) {
+                                var row = '<tr>  <td>' + item.PLATE + '</td>  <td>' + item.BRAND + '</td> <td>' + item.FUEL + '</td> <td>' + item.SHIFTTYPE + '</td>  </tr>';
+                                $('#carTable tbody').append(row);
+                            });
+                            $('#carTable').show();
+                            $('#queryTime').text('Sorgu süresi: ' + data.queryTime + '  saniye').show();
+                        } else {
+                            $('#carTable').hide();
+                            $('#queryTime').text('Sonuç bulunamadı.').show();
+                        }
+                    },
+                    error: function () {
+                        $('#loadingMessage').hide();
+                        // Hata oluştuğunda ayrıntılı hata mesajı göstermek için consola log yazdırabilirsiniz
+                        console.log('Veriler getirilirken bir hata oluştu.');
+                    }
+                });
+                return false;
+            });
+        });
+    </script>
+
+
+
+
+</body>
+
+</html>
+<!-- end document-->
